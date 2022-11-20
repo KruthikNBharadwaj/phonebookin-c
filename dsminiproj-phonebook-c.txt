@@ -1,0 +1,137 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    char firstname[20];
+    char lastname[20];
+    char number[15];
+    int slnumber;
+    struct node *link;
+}NODE;
+
+NODE *start=NULL;
+int sl;
+void display(NODE *start)
+{ 
+ int c=0;
+ NODE *temp;
+ if(start==NULL)
+ {
+  printf("Contacts are empty\n");
+  return;
+ }
+ temp=start;
+ printf("Contacts are:\n");
+ while(temp!=NULL)
+ {
+  printf("%d\t",temp->slnumber);
+  printf("%s\t",temp->firstname);
+  printf("%s\t",temp->lastname);
+  printf("%s\n",temp->number);
+  temp=temp->link;
+  c++;
+ }
+ printf("Number of nodes=%d\n",c);
+}
+
+NODE *create()
+{
+ NODE *nn;
+ nn=(NODE*)malloc(sizeof(NODE));
+ printf("Enter Serial Number:\n");
+ scanf("%d",&nn->slnumber);
+ printf("Enter First name:\n");
+ scanf("%s",nn->firstname);
+ printf("Enter Last name:\n");
+ scanf("%s",nn->lastname);
+ printf("Enter number:\n");
+ scanf("%s",nn->number);
+ nn->link=start;
+ start=nn;
+ printf("Contact saved\n");   
+}
+
+void search()
+{   
+    NODE *p;
+    int ch;
+    p=start;
+    printf("Enter the serial number to be searched\n");
+    scanf("%d",&sl);
+    while(p)
+    {
+        if(p->slnumber==sl)
+        {
+            printf("FirstName: %s",p->firstname);
+            printf("\nLastName: %s",p->lastname);
+            printf("\nNumber: %s\n",p->number);
+        }
+        p=p->link;
+    }
+    do
+    {
+     printf("1:Delete\n 2:Exit\n");
+     printf("Enter your choice\n");
+     scanf("%d",&ch);
+     switch(ch)
+     {
+      case 1:del(sl);
+             break;
+      default:printf("Exit\n");
+              display(start);
+              break;
+     }
+    }while(ch<=1);
+}
+
+void del(sl)
+{
+    NODE *temp;
+    temp=start;
+
+     if(temp==NULL)
+    {
+        printf("Record id not present\n");
+        return;
+    }
+    if(start->slnumber==sl)
+    {
+        printf("\nRecord deleted.");
+        start=start->link;
+        return;
+    }
+    while(temp->link!=NULL)
+    {
+        if(temp->link->slnumber==sl)
+             {
+                 printf("Record deleted.\n");
+                 temp->link = temp->link->link;
+                 return;
+             }
+        temp=temp->link;
+    }
+    printf("Record not found.\n");
+}
+void main()
+{
+ int ch;
+ do
+ {
+  printf("-------Welcome--------\n ");
+  printf("1.Create\n2.Display\n3.Search\n");
+  printf("Enter your choice:");
+  scanf("%d",&ch);
+  switch(ch)
+  {
+   case 1:create();
+              break;
+   case 2:display(start);
+             break;
+   case 3:search();
+              break;
+  default:printf("Enter valid choice\n");
+  }
+ }while(ch<=3);
+}
